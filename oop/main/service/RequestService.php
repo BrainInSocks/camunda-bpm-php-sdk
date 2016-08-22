@@ -20,11 +20,22 @@ class RequestService {
   private $requestUrl;
   private $http_status_code;
   private $restApiUrl;
+  
+  private $userName;
+  private $password;
 
-  public function __construct($restApiUrl) {
+  public function __construct($restApiUrl, $userName = null, $password = null) {
     $this->restApiUrl = $restApiUrl;
+    $this->userName = $userName;
+    $this->password = $password;
   }
-
+  
+  private function addAuthIfAvailable($curlInstance) {
+      if($this->userName != null && $this->password != null) {
+          curl_setopt($curlInstance, CURLOPT_USERPWD, $this->userName . ":" . $this->password);
+      }
+  }
+  
   /**
    * @param Request $requestObject
    */
@@ -154,6 +165,7 @@ class RequestService {
           $ch = curl_init($this->restApiUrl.$this->requestUrl);
           curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'OPTIONS');
           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+          $this->addAuthIfAvailable($ch);
           $request = curl_exec($ch);
           $this->http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
           curl_close($ch);
@@ -179,6 +191,7 @@ class RequestService {
             'Content-Type: application/json',
             'Content-Length: '.strlen($data)
           ));
+          $this->addAuthIfAvailable($ch);
           $request = curl_exec($ch);
           $this->http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
           curl_close($ch);
@@ -207,7 +220,8 @@ class RequestService {
             'Content-Type: application/json',
             'Content-Length: '.strlen($data)
           ));
-
+          $this->addAuthIfAvailable($ch);
+          
           $request = curl_exec($ch);
           $this->http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
           curl_close($ch);
@@ -237,6 +251,8 @@ class RequestService {
             'Content-Type: application/json',
             'Content-Length: '.strlen($data)
           ));
+          $this->addAuthIfAvailable($ch);
+          
           $request = curl_exec($ch);
           $this->http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
           curl_close($ch);
@@ -263,7 +279,8 @@ class RequestService {
         curl_setopt ($ch, CURLOPT_COOKIEJAR, './');
         curl_setopt ($ch, CURLOPT_COOKIEFILE, './');
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-
+        $this->addAuthIfAvailable($ch);
+        
         $request = curl_exec($ch);
         $this->http_status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
