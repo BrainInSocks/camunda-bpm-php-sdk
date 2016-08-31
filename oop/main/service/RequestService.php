@@ -30,7 +30,7 @@ class RequestService {
     $this->password = $password;
   }
   
-  private function addAuthIfAvailable($curlInstance) {
+  protected function addAuthIfAvailable($curlInstance) {
       if($this->userName != null && $this->password != null) {
           curl_setopt($curlInstance, CURLOPT_USERPWD, $this->userName . ":" . $this->password);
       }
