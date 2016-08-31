@@ -23,6 +23,7 @@ use org\camunda\php\sdk\service\ProcessInstanceService;
 use org\camunda\php\sdk\helper\DiagramHelper;
 use org\camunda\php\sdk\service\UserService;
 use org\camunda\php\sdk\service\VariableInstanceService;
+use org\camunda\php\sdk\service\DeploymentService;
 
 
 class Api {
@@ -41,6 +42,12 @@ class Api {
   public $authorization;
   public $history;
   public $identity;
+  
+  /**
+   *
+   * @var DeploymentService
+   */
+  public $deployment;
 
   // CONFIG
   private $restApiUrl = 'http://localhost:8080/engine-rest/';
@@ -64,5 +71,6 @@ class Api {
     $this->task               = new TaskService($this->restApiUrl, $userName, $password);
     $this->user               = new UserService($this->restApiUrl, $userName, $password);
     $this->variableInstance   = new VariableInstanceService($this->restApiUrl, $userName, $password);
+    $this->deployment         = new DeploymentService($this->restApiUrl, $userName, $password);
   }
 }
