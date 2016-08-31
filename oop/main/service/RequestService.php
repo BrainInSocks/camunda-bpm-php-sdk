@@ -15,11 +15,11 @@ use org\camunda\php\sdk\entity\request\VariableRequest;
 use org\camunda\php\sdk\entity\response\VariableInstance;
 
 class RequestService {
-  private $requestObject;
-  private $requestMethod = "GET";
-  private $requestUrl;
-  private $http_status_code;
-  private $restApiUrl;
+  protected $requestObject;
+  protected $requestMethod = "GET";
+  protected $requestUrl;
+  protected $http_status_code;
+  protected $restApiUrl;
   
   private $userName;
   private $password;
