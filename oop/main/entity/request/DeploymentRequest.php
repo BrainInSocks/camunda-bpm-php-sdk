@@ -49,7 +49,7 @@ class DeploymentRequest extends Request {
         foreach($this AS $index => $value) {
             $parameterName = $this->getRequestParameterName($index);
             if($parameterName != null) {
-                $tmp[$index] = $value;
+                $tmp[$parameterName] = $value;
             }
         }
 
