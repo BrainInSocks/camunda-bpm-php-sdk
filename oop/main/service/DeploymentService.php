@@ -18,7 +18,7 @@ class DeploymentService extends RequestService {
    * @return \org\camunda\php\sdk\entity\response\ProcessDefinition $this Requested definition
    */
   public function create(DeploymentRequest $request) {
-    $this->setRequestUrl('/deploymnet/create');
+    $this->setRequestUrl('/deployment/create');
     
     try {
         $response = $this->deploymentRequest($request);
@@ -43,12 +43,13 @@ class DeploymentService extends RequestService {
                 $postData[$name] = $value;
             }
         }
-        $postData['file'] = '@' . realpath($requestFilePath) . ';filename=process.bpmn';
+        $postData['file'] = '@' . realpath($requestFilePath);
         
         
         $ch = curl_init($this->restApiUrl.$this->requestUrl);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPTPOST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:multipart/form-data"));
         curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $this->addAuthIfAvailable($ch);

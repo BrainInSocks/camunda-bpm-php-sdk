@@ -317,7 +317,7 @@ class RequestService {
     return function_exists('curl_version');
   }
 
-  private function reset() {
+  protected function reset() {
     $this->setRequestObject(null);
     $this->setRequestUrl('');
     $this->setRequestMethod('GET');

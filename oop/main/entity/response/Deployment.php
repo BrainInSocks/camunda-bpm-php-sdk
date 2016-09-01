@@ -6,11 +6,12 @@ use org\camunda\php\sdk\helper\CastHelper;
 
 class Deployment extends CastHelper {
     
-    private $id;
-    private $name;
-    private $source;
-    private $tenantId;
-    private $deploymentTime;
+    protected $id;
+    protected $name;
+    protected $source;
+    protected $tenantId;
+    protected $deploymentTime;
+    protected $links;
     
     function getId() {
         return $this->id;
@@ -51,5 +52,12 @@ class Deployment extends CastHelper {
     function setDeploymentTime($deploymentTime) {
         $this->deploymentTime = $deploymentTime;
     }
+    
+    function getLinks() {
+        return $this->links;
+    }
 
+    function setLinks($links) {
+        $this->links = $links;
+    }
 }
