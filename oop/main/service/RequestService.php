@@ -313,7 +313,7 @@ class RequestService {
    *
    * @return bool
    */
-  private function checkCurl() {
+  protected function checkCurl() {
     return function_exists('curl_version');
   }
 
