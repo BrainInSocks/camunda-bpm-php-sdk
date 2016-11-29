@@ -12,7 +12,7 @@ use org\camunda\php\sdk\entity\request\CredentialsRequest;
 use org\camunda\php\sdk\entity\request\ProfileRequest;
 use org\camunda\php\sdk\entity\request\Request;
 use org\camunda\php\sdk\entity\request\VariableRequest;
-use org\camunda\php\sdk\entity\response\VariableInstance;
+use org\camunda\php\sdk\service\RestException;
 
 class RequestService {
   protected $requestObject;
@@ -31,6 +31,8 @@ class RequestService {
   }
   
   protected function addAuthIfAvailable($curlInstance) {
+      curl_setopt($curlInstance, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curlInstance, CURLOPT_SSL_VERIFYHOST, false);
       if($this->userName != null && $this->password != null) {
           curl_setopt($curlInstance, CURLOPT_USERPWD, $this->userName . ":" . $this->password);
       }
@@ -296,15 +298,23 @@ class RequestService {
       return json_decode($request);
     } else {
       $this->reset();
+      
+      $exception = null;
       if($request != null && $request != "" && !empty($request)) {
         $error = json_decode($request);
+        
+        $exception = new RestException($error->message);
+        $exception->setHttpStatus($this->http_status_code);
       } else {
         $error = new \stdClass();
         $error->type = "Not found!";
         $error->message = "No Message!";
+        
+        $exception = new RestException($error->message);
+        $exception->setHttpStatus($this->http_status_code);
       }
-      throw new \Exception("Error! HTTP Status Code: " .$this->http_status_code. " -- ErrorType: ". $error->type . " --
-      Error Message: ". $error->message);
+      
+      throw $exception;
     }
   }
 
