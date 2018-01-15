@@ -43,7 +43,7 @@ class DeploymentService extends RequestService {
                 $postData[$name] = $value;
             }
         }
-        $postData['file'] = '@' . realpath($requestFilePath);
+        $postData['file'] = new \CURLFile($requestFilePath);
         
         
         $ch = curl_init($this->restApiUrl.$this->requestUrl);
