@@ -43,7 +43,11 @@ class DeploymentService extends RequestService {
                 $postData[$name] = $value;
             }
         }
-        $postData['file'] = new \CURLFile($requestFilePath);
+        if(version_compare(phpversion(), "5.5.0") == -1) {
+            $postData['file'] = '@' . realpath($requestFilePath);
+        } else {
+            $postData['file'] = new \CURLFile($requestFilePath);
+        }
         
         
         $ch = curl_init($this->restApiUrl.$this->requestUrl);
